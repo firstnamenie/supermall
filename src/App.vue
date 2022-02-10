@@ -1,12 +1,13 @@
 <template>
-
+  <mainTabbar></mainTabbar>
 </template>
 
 <script>
+  import mainTabbar from '@/components/common/mainTabber/mainTabbar'
   export default {
     name: 'App',
     components: {
-      HelloWorld
+      mainTabbar
     }
   }
 </script>
