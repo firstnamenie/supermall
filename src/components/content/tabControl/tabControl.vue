@@ -12,6 +12,7 @@
       methods:{
         itemClick(index){
           this.currentIndex=index
+          this.$emit('imgClick',this.currentIndex)
         }
       },
       data(){
@@ -35,6 +36,7 @@
     display: flex;
     text-align: center;
     font-size: 15px;
+    background-color: white;
   }
   .tab-control-item{
     flex: 1;

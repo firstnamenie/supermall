@@ -1,4 +1,5 @@
 import {request} from "./request";
+import {request2} from "./request";
 
 export function getHomeMultidata() {
   return request({
@@ -7,7 +8,7 @@ export function getHomeMultidata() {
 }
 
 export function getHomeGoods(type, page) {
-  return request({
+  return request2({
     url: '/home/data',
     params: {
       type,
@@ -26,13 +27,13 @@ export function getHomeGoods(type, page) {
 //
 // test()
 
-let totalNums = []
-
-const nums1 = [20, 11, 222]
-const nums2 = [111, 22, 333]
-
-// for (let n of nums1) {
-//   totalNums.push(n)
-// }
-
-totalNums.push(...nums1)
+// let totalNums = []
+//
+// const nums1 = [20, 11, 222]
+// const nums2 = [111, 22, 333]
+//
+// // for (let n of nums1) {
+// //   totalNums.push(n)
+// // }
+//
+// totalNums.push(...nums1)
