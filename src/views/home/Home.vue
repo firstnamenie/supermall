@@ -5,17 +5,18 @@
         创益星购物街
       </template>
     </navbar>
+    <tabcontrol  class="tabcontrol1" :titles="['流行','新款','精选'] "  @imgClick="tabclick" ref="tabControl1" v-show="istabcontrol"></tabcontrol>
     <scroll  class="content"
              ref="scroll"
              :probe-type="3"
-             :pullUpLoad="true"
+             :upload="true"
              @scroll="contentScroll"
-             @pullingUp="loadMore"
+             @pullingup="loadMore"
     >
-      <homeseiper :banners="banners"></homeseiper>
+      <homeseiper :banners="banners"  @imageItemLoad="imageItemLoad"></homeseiper>
       <recommendView :recommends="recommends"></recommendView>
       <feature></feature>
-      <tabcontrol  :titles="['流行','新款','精选'] " @imgClick="tabclick"></tabcontrol>
+      <tabcontrol  :titles="['流行','新款','精选'] "  @imgClick="tabclick" ref="tabControl2"></tabcontrol>
       <goodlist :goods="goodItem"></goodlist>
     </scroll>
     <backTop @click="backTopClick" v-show="isShowBackTop"></backTop>
@@ -53,6 +54,9 @@
         banners: [],
         recommends: [],
         isShowBackTop:false,
+        istabcontrol:false,
+        offsetTop:0,
+        saveY:0,
         goods:{
           'pop':{page:0,list:[]},
           'new':{page:0,list:[]},
@@ -67,17 +71,20 @@
     },
     created() {
       this.getHomeMultidatas();
+    },
+    mounted(){
       this.getHomeGood('pop')
       this.getHomeGood('new')
       this.getHomeGood('sell')
-    },
-    mounted(){
       const refresh=debounce(this.$refs.scroll.refresh,500)
       this.$bus.$on("itemImageLoad",()=>{
         refresh()
       });
     },
     methods: {
+      imageItemLoad(){
+        this.offsetTop=this.$refs.tabControl2.$el.offsetTop
+      },
       getHomeMultidatas(){
         getHomeMultidata().then(res => {
           // this.result = res;
@@ -91,7 +98,7 @@
         getHomeGoods(type,page).then((res)=>{
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page+=1
-          this.$refs.scroll.scroll.finishPullUp()
+          this.$refs.scroll.refresh()
         })
       },
       tabclick(index){
@@ -100,12 +107,15 @@
           case 1:this.currenttype='new';break;
           case 2:this.currenttype='sell';break;
         }
+        this.$refs.tabControl1.currentIndex=index
+        this.$refs.tabControl2.currentIndex=index
       },
       backTopClick(){
         this.$refs.scroll.scroll.scrollTo(0,0,300)
       },
       contentScroll(position){
         this.isShowBackTop = (-position.y) > 1000
+        this.istabcontrol=(-position.y) > this.offsetTop
       },
       loadMore(){
         this.getHomeGood(this.currenttype)
@@ -125,11 +135,15 @@
     background-color: var(--color-tint);
     color: #fff;
 
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 9;
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*z-index: 9;*/
+  }
+  .tabcontrol1{
+    position: relative;
+    z-index: 10;
   }
 
   /*.tab-control {*/
@@ -139,9 +153,9 @@
   /*}*/
 
   .content {
-    overflow-y: scroll;
+    overflow: hidden;
     position: absolute;
-    top: 0px;
+    top: 44px;
     bottom: 49px;
     left: 0;
     right: 0;

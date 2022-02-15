@@ -4,7 +4,7 @@ const home=()=>import("@/views/home/home.vue")
 const classify=()=>import("@/views/classify/classify.vue")
 const profile=()=>import("@/views/profile/profile.vue")
 const shopping=()=>import("@/views/shopping/shopping.vue")
-
+const detail=()=>import("@/views/detail/detail.vue")
 const routes = [
     {
         path:'',
@@ -12,7 +12,7 @@ const routes = [
     },
     {
         path:'/home',
-        component: home
+        component: home,
     },
     {
         path:'/classify',
@@ -25,6 +25,10 @@ const routes = [
     {
         path:'/shopping',
         component: shopping
+    },
+    {
+      path:'/detail/:iid',
+      component:detail
     }
 ]
 

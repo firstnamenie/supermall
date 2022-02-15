@@ -7,8 +7,9 @@
 </template>
 
 <script>
-  import BScroll from 'better-scroll'
-
+  import BtScroll from '@better-scroll/core'
+  import Pullup from '@better-scroll/pull-up'
+  BtScroll.use(Pullup)
   export default {
     name: "Scroll",
     props: {
@@ -16,25 +17,23 @@
         type: Number,
         default: 0
       },
-      pullUpLoad: {
+      upload: {
         type: Boolean,
-        default: false
+        default: true
       }
     },
     data() {
       return {
-        scroll: null,
-        message: '哈哈哈',
+        scroll: null
       }
     },
     mounted() {
       // 1.创建BScroll对象
-      this.scroll = new BScroll(this.$refs.wrapper, {
+      this.scroll = new BtScroll(this.$refs.wrapper, {
         click: true,
         probeType: this.probeType,
-        pullUpLoad: this.pullUpLoad
+        pullUpLoad: true
       })
-      console.log(this.scroll)
       // 2.监听滚动的位置
       this.scroll.on('scroll', (position) => {
         // console.log(position);
@@ -42,8 +41,8 @@
       })
 
       // 3.监听上拉事件
-      this.scroll.on('pullingUp', () => {
-        this.$emit('pullingUp')
+      this.scroll.on('pullingUp',()=>{
+        this.$emit('pullingup')
       })
     },
     methods: {
@@ -54,8 +53,8 @@
         console.log(".............")
         this.scroll&&this.scroll.refresh()
       },
-      finishPullUp() {
-        this.scroll.finishPullUp()
+      tabRefresh(){
+        return this.scroll?this.scroll.y:0
       }
     }
   }

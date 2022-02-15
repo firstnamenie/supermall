@@ -1,5 +1,5 @@
 <template>
-  <mainTabbar></mainTabbar>
+  <main-tabbar/>
 </template>
 
 <script>

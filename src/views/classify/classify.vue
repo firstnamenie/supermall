@@ -116,18 +116,6 @@
       },
       methods:{
 
-      },
-      mounted(){
-          this.scroll=new BSscroll(document.querySelector('.content'),{
-          })
-
-        this.scroll.on('scroll',(position)=>{
-          // console.log(position)
-        })
-
-        this.scroll.on('pullingUp',()=>{
-          // console.log("已加载")
-        })
       }
     }
 </script>
