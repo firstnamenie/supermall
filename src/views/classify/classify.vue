@@ -115,6 +115,7 @@
         }
       },
       methods:{
+
       },
       mounted(){
           this.scroll=new BSscroll(document.querySelector('.content'),{

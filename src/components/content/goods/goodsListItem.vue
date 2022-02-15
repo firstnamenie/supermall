@@ -22,7 +22,7 @@
       },
       methods:{
         imgLoad(){
-
+          this.$bus.$emit('itemImageLoad')
         }
       }
     }

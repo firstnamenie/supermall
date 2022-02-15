@@ -6,13 +6,16 @@
       </template>
     </navbar>
     <scroll  class="content"
-             ref="scroll" :probe-type="3"
+             ref="scroll"
+             :probe-type="3"
+             :pullUpLoad="true"
              @scroll="contentScroll"
+             @pullingUp="loadMore"
     >
       <homeseiper :banners="banners"></homeseiper>
       <recommendView :recommends="recommends"></recommendView>
       <feature></feature>
-      <tabcontrol  class="tab-Item" :titles="['流行','新款','精选'] " @imgClick="tabclick"></tabcontrol>
+      <tabcontrol  :titles="['流行','新款','精选'] " @imgClick="tabclick"></tabcontrol>
       <goodlist :goods="goodItem"></goodlist>
     </scroll>
     <backTop @click="backTopClick" v-show="isShowBackTop"></backTop>
@@ -30,6 +33,7 @@
   import backTop from '@/components/content/backtop/backTop'
 
   import {getHomeMultidata,getHomeGoods} from '@/network/home'
+  import {debounce}from '@/common/utils'
 
   export default {
     name: "Home",
@@ -67,6 +71,12 @@
       this.getHomeGood('new')
       this.getHomeGood('sell')
     },
+    mounted(){
+      const refresh=debounce(this.$refs.scroll.refresh,500)
+      this.$bus.$on("itemImageLoad",()=>{
+        refresh()
+      });
+    },
     methods: {
       getHomeMultidatas(){
         getHomeMultidata().then(res => {
@@ -81,7 +91,7 @@
         getHomeGoods(type,page).then((res)=>{
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page+=1
-          // this.$refs.scroll.scroll.finishPullUp()
+          this.$refs.scroll.scroll.finishPullUp()
         })
       },
       tabclick(index){
@@ -96,10 +106,10 @@
       },
       contentScroll(position){
         this.isShowBackTop = (-position.y) > 1000
+      },
+      loadMore(){
+        this.getHomeGood(this.currenttype)
       }
-      // loadMore(){
-      //   this.getHomeGood(this.currenttype)
-      // }
     }
   }
 </script>
@@ -127,11 +137,7 @@
     /*top: 44px;*/
     /*z-index: 9;*/
   /*}*/
-  .tab-Item{
-    position: sticky;
-    top:44px;
-    z-index: 9;
-  }
+
   .content {
     overflow-y: scroll;
     position: absolute;
