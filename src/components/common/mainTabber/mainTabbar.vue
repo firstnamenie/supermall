@@ -47,9 +47,12 @@
           <div >我的</div>
         </template>
       </tabbaritem>
-
     </tabbar>
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <keep-alive exclude="detail">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
 </template>
 
 <script>

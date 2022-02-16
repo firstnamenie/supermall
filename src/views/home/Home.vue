@@ -72,6 +72,13 @@
     created() {
       this.getHomeMultidatas();
     },
+    activated(){
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated(){
+      this.saveY=this.$refs.scroll.tabRefresh()
+    },
     mounted(){
       this.getHomeGood('pop')
       this.getHomeGood('new')
