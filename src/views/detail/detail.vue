@@ -7,6 +7,8 @@
       <detailShopInfo :shop="shop"></detailShopInfo>
       <detailParams :GoodsParam="paramInfo"></detailParams>
       <detailGoods :detailInfo="detailInfo" @loadImgEvent="loadImg"></detailGoods>
+      <detailComment :comment="CommentInfor"></detailComment>
+      <goodlist :goods="recommends"></goodlist>
     </scroll>
   </div>
 </template>
@@ -18,10 +20,13 @@
     import detailGoodsInfo from './childComponts/DetailGoods'
     import detailGoods from './childComponts/DetailGoodsInfo'
     import detailParams from './childComponts/DetailParams'
+    import detailComment from './childComponts/DetailComment'
+    import goodlist from '@/components/content/goods/goodslist'
+    import {itemImageMinin} from '@/common/mixin'
 
+    import {debounce}from '@/common/utils'
 
-
-    import {detail,Goods,Shop,GoodsParam} from '@/network/detail'
+    import {detail,Goods,Shop,GoodsParam,recommend} from '@/network/detail'
     import scroll from '@/components/common/scroll/Scroll'
     export default {
       name: "detail",
@@ -32,12 +37,18 @@
         detailGoodsInfo,
         scroll,
         detailGoods,
-        detailParams
+        detailParams,
+        detailComment,
+        goodlist
       },
+      mixins:[itemImageMinin],
       methods:{
         loadImg(){
-          this.$refs.scroll.scroll.refresh()
+          this.imgLoaditem()
         }
+      },
+      destroyed(){
+        this.$bus.$off("itemImageLoad",this.itemListen)
       },
       data(){
         return{
@@ -46,18 +57,27 @@
           goods:{},
           shop:{},
           detailInfo:[],
-          GoodsParam:[]
+          GoodsParam:[],
+          CommentInfor:{},
+          recommends:[]
         }
       },
       created(){
         this.iid= this.$route.params.iid
         detail(this.iid).then((res)=>{
-          console.log(res)
           this.topImage=res.result.itemInfo.topImages
           this.goods=new Goods(res.result.itemInfo,res.result.columns,res.result.shopInfo.services)
           this.shop=new Shop(res.result.shopInfo)
           this.detailInfo=res.result.detailInfo
           this.GoodsParam=new GoodsParam(res.result.itemParams.info,res.result.itemParams.rule)
+          const data=res.result
+          if(data.rate.cRate!=0){
+            this.CommentInfor=data.rate.list[0]
+          }
+
+        });
+        recommend().then((res)=>{
+          this.recommends=res.data.list
         })
 
 

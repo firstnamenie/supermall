@@ -32,6 +32,7 @@
   import goodlist from '@/components/content/goods/goodslist'
   import scroll from '@/components/common/scroll/Scroll'
   import backTop from '@/components/content/backtop/backTop'
+  import {itemImageMinin} from '@/common/mixin'
 
   import {getHomeMultidata,getHomeGoods} from '@/network/home'
   import {debounce}from '@/common/utils'
@@ -72,21 +73,19 @@
     created() {
       this.getHomeMultidatas();
     },
+    mixin:[itemImageMinin],
     activated(){
       this.$refs.scroll.scrollTo(0,this.saveY,0)
       this.$refs.scroll.refresh()
     },
     deactivated(){
       this.saveY=this.$refs.scroll.tabRefresh()
+      this.$bus.$off("itemImageLoad",this.itemListen)
     },
     mounted(){
       this.getHomeGood('pop')
       this.getHomeGood('new')
       this.getHomeGood('sell')
-      const refresh=debounce(this.$refs.scroll.refresh,500)
-      this.$bus.$on("itemImageLoad",()=>{
-        refresh()
-      });
     },
     methods: {
       imageItemLoad(){

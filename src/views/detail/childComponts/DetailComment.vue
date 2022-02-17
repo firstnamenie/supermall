@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from "common/utils.js";
+import { formatDate } from "@/common/utils.js";
 export default {
   props: {
     comment: {
@@ -67,7 +67,7 @@ export default {
 }
 .comment_more::after {
   content: "";
-  background: url("~assets/img/detail/right_arrow.svg") 0 0/1.06rem 1.06rem;
+  background: url("../../../assets/img/detail/right_arrow.svg") 0 0/1.06rem 1.06rem;
   display: inline-block;
   position: relative;
   top: 0.26rem;

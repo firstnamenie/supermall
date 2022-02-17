@@ -8,6 +8,12 @@ export  function detail(iid) {
   })
 }
 
+export  function recommend() {
+  return request2({
+    url:'/recommend'
+  })
+}
+
 export class Goods {
 
   constructor(itemInfo,columns,services){
