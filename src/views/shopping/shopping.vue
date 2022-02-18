@@ -4,19 +4,20 @@
           <template v-slot:center >
               购物车({{shoppCart}})
           </template>
-
-
       </navbar>
+      <cart-list></cart-list>
     </div>
 </template>
 
 <script>
     import navbar from '@/components/common/navbar/NavBar'
+    import cartList from './childComps/CartList'
     import { mapGetters } from 'vuex'
     export default {
       name: "shopping",
       components:{
-        navbar
+        navbar,
+        cartList
       },
       computed:{
         ...mapGetters([
