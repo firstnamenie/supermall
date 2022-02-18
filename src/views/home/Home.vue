@@ -19,7 +19,7 @@
       <tabcontrol  :titles="['流行','新款','精选'] "  @imgClick="tabclick" ref="tabControl2"></tabcontrol>
       <goodlist :goods="goodItem"></goodlist>
     </scroll>
-    <backTop @click="backTopClick" v-show="isShowBackTop"></backTop>
+    <back-top @click="backTopClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 <script>
@@ -31,8 +31,7 @@
   import feature from './childComps/feature'
   import goodlist from '@/components/content/goods/goodslist'
   import scroll from '@/components/common/scroll/Scroll'
-  import backTop from '@/components/content/backtop/backTop'
-  import {itemImageMinin} from '@/common/mixin'
+  import {itemImageMinin,backTopMixin} from '@/common/mixin'
 
   import {getHomeMultidata,getHomeGoods} from '@/network/home'
   import {debounce}from '@/common/utils'
@@ -46,15 +45,13 @@
       feature,
       tabcontrol,
       goodlist,
-      scroll,
-      backTop
+      scroll
     },
     data() {
       return {
         currenttype:'pop',
         banners: [],
         recommends: [],
-        isShowBackTop:false,
         istabcontrol:false,
         offsetTop:0,
         saveY:0,
@@ -73,7 +70,7 @@
     created() {
       this.getHomeMultidatas();
     },
-    mixin:[itemImageMinin],
+    mixins:[itemImageMinin,backTopMixin],
     activated(){
       this.$refs.scroll.scrollTo(0,this.saveY,0)
       this.$refs.scroll.refresh()
@@ -115,9 +112,6 @@
         }
         this.$refs.tabControl1.currentIndex=index
         this.$refs.tabControl2.currentIndex=index
-      },
-      backTopClick(){
-        this.$refs.scroll.scroll.scrollTo(0,0,300)
       },
       contentScroll(position){
         this.isShowBackTop = (-position.y) > 1000

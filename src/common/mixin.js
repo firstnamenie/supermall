@@ -39,6 +39,7 @@
 // };
 
 import {debounce}from '@/common/utils'
+import backTop from '@/components/content/backtop/backTop'
 export const itemImageMinin={
   data(){
     return{
@@ -55,4 +56,21 @@ export const itemImageMinin={
     this.$bus.$on("itemImageLoad",this.itemListen)
     console.log("我是混入数据");
   }
+}
+
+export const  backTopMixin= {
+  components:{
+    backTop
+  },
+  data(){
+    return{
+      isShowBackTop:false
+    }
+  },
+  methods:{
+    backTopClick(){
+      this.$refs.scroll.scroll.scrollTo(0,0,300)
+    }
+  }
+
 }

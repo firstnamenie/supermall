@@ -31,6 +31,7 @@
     methods:{
       titleClick(index){
         this.indexflag=index
+        this.$emit("detailNavBarClick",index)
       },
       backclick(){
         this.$router.go(-1)
