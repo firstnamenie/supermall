@@ -29,6 +29,7 @@
     methods: {
       addToCart() {
         this.$emit("addEvent");
+
       }
     }
   };

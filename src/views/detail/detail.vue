@@ -12,6 +12,7 @@
     </scroll>
     <detail-botton-bar @addEvent="shoppingChart"></detail-botton-bar>
     <back-top @click="backTopClick" v-show="isShowBackTop"></back-top>
+    <toest :message="message" :isShowTip="isShowTip"></toest>
   </div>
 </template>
 
@@ -26,7 +27,10 @@
     import goodlist from '@/components/content/goods/goodslist'
     import {itemImageMinin,backTopMixin} from '@/common/mixin'
     import detailBottonBar from './childComponts/detailBottonBar'
+    import toest from  '@/components/common/toest/toest'
+
     import {debounce}from '@/common/utils'
+    import { mapActions } from 'vuex'
 
     import {detail,Goods,Shop,GoodsParam,recommend} from '@/network/detail'
     import scroll from '@/components/common/scroll/Scroll'
@@ -42,10 +46,12 @@
         detailParams,
         detailComment,
         goodlist,
-        detailBottonBar
+        detailBottonBar,
+        toest
       },
       mixins:[itemImageMinin,backTopMixin],
       methods:{
+        ...mapActions(['addShoppingCart']),
         shoppingChart(){
           const product={}
           product.img=this.topImage[0]
@@ -53,8 +59,20 @@
           product.desc=this.goods.desc
           product.price=this.goods.newPrice
           product.iid=this.iid
+          this.addShoppingCart(product).then((res)=>{
+            this.message=res
+            this.isShowTip=true
+            setTimeout(()=>{
+              this.message=res
+              this.isShowTip=false
+            },2000)
+          })
           // this.$store.commit("addShoppingCart",product)
-          this.$store.dispatch("addShoppingCart",product)
+          // this.$store.dispatch("addShoppingCart",product).then((res)=>{
+          //   console.log(res);
+          // })
+
+
         },
         scrollPostion(position){
           this.isShowBackTop = (-position.y) > 1000
@@ -98,7 +116,9 @@
           recommends:[],
           detailThimeTop:[],
           detailThimeFun:null,
-          currentIndexs:0
+          currentIndexs:0,
+          message:'',
+          isShowTip:false
         }
       },
       created(){

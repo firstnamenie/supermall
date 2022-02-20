@@ -3,6 +3,7 @@ export default {
     payLoad.count++
   },
   addToChart(state,payLoad){
+    payLoad.checked=true
     state.cartList.push(payLoad)
   }
 }
